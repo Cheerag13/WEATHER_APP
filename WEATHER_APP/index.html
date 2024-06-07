@@ -62,7 +62,7 @@
             if (humidityElement) humidityElement.innerHTML = `${data.main.humidity}%`;
             if (windElement) windElement.innerHTML = `${data.wind.speed} km/h`;
 
-            // Update weather icon based on the weather condition
+            
             const weatherCondition = data.weather[0].main.toLowerCase();
             switch (weatherCondition) {
                 case 'clouds':
@@ -81,7 +81,7 @@
                     weatherIcon.src = "IMAGES/MIST.png";
                     break;
                 default:
-                    weatherIcon.src = "IMAGES/sun (1).png"; // Default icon
+                    weatherIcon.src = "IMAGES/sun (1).png"; 
                     break;
 
             }
@@ -100,7 +100,7 @@
         }
     });
 
-    checkWeather("New Delhi"); // Default city to display on load
+    checkWeather("New Delhi"); 
     </script>
 
 </body>
