@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" id="cityInput" placeholder="Enter city name" spellcheck="false">
+            <button id="searchButton"><img src="IMAGES/SEARCH.png" width="40" height="40" alt="Search"></button>
+        </div>
+        <br>
+        <div class="weather">
+            <img src="IMAGES/sun (1).png" width="200" class="weather-icon" alt="Weather Icon">
+            <br>
+            <h1 class="temp">22°C</h1>
+            <h2 class="city">NEW YORK</h2>
+            <div class="details">
+                <div class="col">
+                    <img src="IMAGES/HUMIDITY.png" width="100" alt="Humidity Icon">
+                    <div>
+                        <p class="humidity">50%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="IMAGES/WIND.png" width="100" alt="Wind Icon">
+                    <div>
+                        <p class="wind">15km/h</p>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const apiKey = "11e06c1c2d0081417211f0652a737b0b";
+    const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+    const weatherIcon = document.querySelector(".weather-icon");
+
+    async function checkWeather(city) {
+        try {
+            const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+            if (!response.ok) {
+                throw new Error(`City not found: ${response.statusText}`);
+            }
+            const data = await response.json();
+
+            console.log(data);
+
+            const cityElement = document.querySelector(".city");
+            const tempElement = document.querySelector(".temp");
+            const humidityElement = document.querySelector(".humidity");
+            const windElement = document.querySelector(".wind");
+
+            if (cityElement) cityElement.innerHTML = data.name;
+            if (tempElement) tempElement.innerHTML = `${data.main.temp}°C`;
+            if (humidityElement) humidityElement.innerHTML = `${data.main.humidity}%`;
+            if (windElement) windElement.innerHTML = `${data.wind.speed} km/h`;
+
+            // Update weather icon based on the weather condition
+            const weatherCondition = data.weather[0].main.toLowerCase();
+            switch (weatherCondition) {
+                case 'clouds':
+                    weatherIcon.src = "IMAGES/CLOUDY.png";
+                    break;
+                case 'clear':
+                    weatherIcon.src = "IMAGES/sun (1).png";
+                    break;
+                case 'rain':
+                    weatherIcon.src = "IMAGES/RAIN.png";
+                    break;
+                case 'drizzle':
+                    weatherIcon.src = "IMAGES/DRIZZLE.png";
+                    break;
+                case 'mist':
+                    weatherIcon.src = "IMAGES/MIST.png";
+                    break;
+                default:
+                    weatherIcon.src = "IMAGES/sun (1).png"; // Default icon
+                    break;
+
+            }
+        } catch (error) {
+            console.error("Error fetching weather data:", error);
+            alert("Error fetching weather data: " + error.message);
+        }
+    }
+
+    document.getElementById("searchButton").addEventListener("click", () => {
+        const city = document.getElementById("cityInput").value.trim();
+        if (city) {
+            checkWeather(city);
+        } else {
+            alert("Please enter a city name");
+        }
+    });
+
+    checkWeather("New Delhi"); // Default city to display on load
+    </script>
+
+</body>
+</html>
